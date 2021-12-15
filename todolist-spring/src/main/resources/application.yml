@@ -1,0 +1,28 @@
+# ===============================
+# = Application
+# ===============================
+application:
+  title: Comodo TodoList
+  version: 1.0.0
+
+
+# ===============================
+# = Database
+# ===============================
+spring:
+  data:
+    mongodb:
+      database: todolist
+
+
+db:
+  bootstrap: false
+  drop: true
+
+
+
+# ===============================
+# = SERVER
+# ===============================
+server:
+  port: 9090
