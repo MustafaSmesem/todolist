@@ -1,37 +1,40 @@
 version: "3.8"
 
 services:
-  frontend:
-    depends_on: 
-      - backend
-    build: ./frontend
+  web:
+    depends_on:
+      - api
+    build: ./todolist-react
+    image: todolist_web:1
     ports:
-      - 3000:3000
-    volumes:
-      - ./frontend:/app
+      - "80:80"
+    restart: unless-stopped
 
-  web_test:
-    image: vidly_frontend
-    volumes:
-      - ./frontend:/app
-    command: npm test
-
-  backend: 
-    build: ./backend
+  api:
+    depends_on:
+      - db
+    build: ./todolist-spring
+    image: todolist_api:1
     ports: 
-      - 3001:3001
+      - "9090:9090"
     environment: 
-      DB_URL: mongodb://db/vidly
-    volumes:
-      - ./backend:/app
-    command: ./docker-entrypoint.sh
+      DB_URL: mongodb://db:27020/todolist
+    healthcheck:
+      test: [ "CMD-SHELL", "nc -z localhost:27020" ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
 
   db:
     image: mongo:4.0-xenial
+    command: mongod --port 27020
     ports:
-      - 27017:27017
+      - "27020:27020"
     volumes:
-      - vidly:/data/db
+      - todolist:/data/db
+    restart: unless-stopped
 
 volumes:
-  vidly:
+  todolist:

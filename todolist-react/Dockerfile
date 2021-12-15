@@ -1,13 +1,16 @@
-FROM node:14.16.0-alpine3.13
-
-RUN addgroup app && adduser -S -G app app
-USER app
-
+FROM node:14.15.0-alpine3.12 AS build-stage
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+ENV REACT_APP_API_URL=http://143.198.136.220:3001/api
+RUN npm run build
 
-EXPOSE 3000 
 
-CMD ["npm", "start"]
+FROM nginx:1.12-alpine
+COPY --from=build-stage /app/build /usr/share/nginx/html
+EXPOSE 80
+ENTRYPOINT [ "nginx", "-g", "daemon off;" ]
+
+
+
