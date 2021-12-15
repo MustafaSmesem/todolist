@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Box} from "@mui/material";
 import Controls from "../../widgets/form/controls/controls";
 import {Form, UseForm} from "../../widgets/form/Form";
@@ -10,9 +10,12 @@ function TodoForm(props) {
 
     const {values, handleInputChange} = UseForm({...todo}, true, ()=>true);
 
+    const [disableSubmit, setDisableSubmit] = useState(false);
+
     const submit = async (e) => {
         e.preventDefault();
-        handleSubmit(values, todo.group);
+        setDisableSubmit(true);
+        await handleSubmit(values, todo.group);
     }
 
     return (
@@ -57,6 +60,7 @@ function TodoForm(props) {
                     label="Save"
                     type="submit"
                     style={{width: '80%', marginTop: 20}}
+                    disabled={disableSubmit}
                 />
             </Box>
         </Form>
