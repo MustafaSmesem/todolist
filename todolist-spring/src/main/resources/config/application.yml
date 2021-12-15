@@ -1,0 +1,19 @@
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  data:
+    mongodb:
+      database: todolist
+
+---
+
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  data:
+    mongodb:
+      uri:  ${DB_URL})

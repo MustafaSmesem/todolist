@@ -11,15 +11,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@ConditionalOnProperty(name= "application.db-init", havingValue = "true")
 public class BootstrapDB implements ApplicationRunner {
 
     private final UserRepository userRepository;
@@ -28,24 +32,22 @@ public class BootstrapDB implements ApplicationRunner {
     private final GroupRepository groupRepository;
 
 
-    @Value("${db.bootstrap}") private boolean isActive;
-    @Value("${db.drop}") private boolean dropDB;
+    @Value("${application.db-init-checker:/tmp/.initDB}")
+    private String checkerPath;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
-        if (isActive) {
-            Log.warn("Bootstrapping db");
-            if (dropDB) {
-                Log.warn("Drop database before bootstrapping");
-                mongoTemplate.getDb().drop();
-            }
-            var role1 = createRole("STANDARD_USER", "Standard User - Has no admin rights");
-            var role2 = createRole("ADMIN_USER", "Admin User - Has permission to perform admin tasks");
-            createUser("Mustafa", "SAMISM", "mustafa.smesem@gmail.com", "1234" , true, Arrays.asList(role1, role2));
-            createUser("Mustafa", "SAMISM", "user@doamin.com", "1234" , false, List.of(role1));
-
+    public void run(ApplicationArguments args) {
+        if (alreadyInitialized()) {
+            Log.warn("Database already initialized, TodoList backend server has been started");
+            return;
         }
-        Log.warn("Comodo %s backend server has been started", "TodoList");
+        Log.warn("Initializing database...");
+        mongoTemplate.getDb().drop();
+        var role1 = createRole("STANDARD_USER", "Standard User - Has no admin rights");
+        var role2 = createRole("ADMIN_USER", "Admin User - Has permission to perform admin tasks");
+        createUser("Mustafa", "SAMISM", "mustafa.smesem@gmail.com", "1234" , true, Arrays.asList(role1, role2));
+        createUser("Mustafa", "SAMISM", "user@domain.com", "1234" , false, List.of(role1));
+        Log.warn("TodoList backend server has been started");
     }
 
     private Role createRole(String name, String description) {
@@ -70,6 +72,17 @@ public class BootstrapDB implements ApplicationRunner {
         group.setUser(user);
         group.setTitle("Default");
         groupRepository.save(group);
+    }
+
+    private boolean alreadyInitialized() {
+        try {
+            File myObj = new File(checkerPath);
+            if (!myObj.createNewFile()) return true;
+        } catch (IOException e) {
+            Log.error("An error occurred.");
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

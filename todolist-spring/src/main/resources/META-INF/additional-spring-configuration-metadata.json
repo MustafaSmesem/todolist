@@ -9,6 +9,20 @@
       "name": "application.version",
       "type": "java.lang.String",
       "description": "The version of my application."
+    },
+    {
+      "name": "app.db-init",
+      "type": "java.lang.String",
+    },
+    {
+      "name": "application.db-init-checker",
+      "type": "java.lang.String",
+      "description": "The path of file that program will add after initialize the db."
+    },
+    {
+      "name": "application.db-init",
+      "type": "java.lang.String",
+      "description": "Set true to initialize database."
     }
   ]
 }
