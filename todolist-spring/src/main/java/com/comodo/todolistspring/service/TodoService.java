@@ -19,16 +19,20 @@ public class TodoService {
     private final NotificationQueue notificationQueue;
 
     public Todo save(Todo todo, String userId) {
+        boolean notification = true;
         if (todo.getId() != null && !todo.getId().isEmpty()) {
             var todoOptional = todoRepository.findById(todo.getId());
             if (todoOptional.isEmpty())
                 throw new DocumentNotFoundException("Todo", todo.getId());
-            if (!todoOptional.get().getUser().getId().equals(userId))
+            var oldTodo = todoOptional.get();
+            if (!oldTodo.getUser().getId().equals(userId))
                 throw new BadRequestException("You dont have the permission to modify another person todos");
+
+            notification = (!oldTodo.getDescription().equals(todo.getDescription()) || !oldTodo.getDueDate().equals(todo.getDueDate()));
         }
         todo.setUser(new User(userId));
         todo = todoRepository.save(todo);
-        notificationQueue.addNotification(new Notification(todo));
+        if (notification) notificationQueue.addNotification(new Notification(todo));
         return todo;
     }
 
