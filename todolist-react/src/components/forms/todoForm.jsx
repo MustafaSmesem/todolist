@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import {Box} from "@mui/material";
 import Controls from "../../widgets/form/controls/controls";
 import {Form, UseForm} from "../../widgets/form/Form";
-import {DropDownGroup} from "../../widgets/dropdown/DropDownGroup";
-import {DropDownPriority} from "../../widgets/dropdown/DropDownPriority";
+import {DropDownGroup} from "../dropdown/DropDownGroup";
+import {DropDownPriority} from "../dropdown/DropDownPriority";
 
 function TodoForm(props) {
     const {todo, groups, priorities, handleSubmit} = props;
