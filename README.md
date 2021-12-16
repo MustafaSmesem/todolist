@@ -1,6 +1,12 @@
 # Todolist
 ###### Todolist WebAPP `version 1.0.0`
-[![docker build available](https://github.com/MustafaSmesem/todolist/blob/master/img/docker_available.png)]
+
+
+<img src="https://img.shields.io/badge/react%20-%2320232a.svg?&style=for-the-badge&logo=react" alt="react"/>
+<img src="https://img.shields.io/badge/spring%20boot%20-%2320232a.svg?&style=for-the-badge&logo=springboot" alt="springboot"/>
+<img src="https://img.shields.io/badge/rabbitMQ%20-%2320232a.svg?&style=for-the-badge&logo=rabbitmq" alt="rabbitmq"/>
+<img src="https://img.shields.io/badge/mongoDB%20-%2320232a.svg?&style=for-the-badge&logo=mongodb" alt="mongodb"/>
+<img src="https://img.shields.io/badge/docker%20-%2320232a.svg?&style=for-the-badge&logo=docker" alt="docker"/>
 
 ## Overview
 Free and open source todo task manager app.
