@@ -17,7 +17,7 @@ public class JwtAuthenticationController {
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<?> generateAuthenticationToken(@RequestBody JwtRequest authenticationRequest) {
+    public ResponseEntity<?> authenticateUser(@RequestBody JwtRequest authenticationRequest) {
         return jwtService.authenticate(authenticationRequest.username(), authenticationRequest.password());
     }
 }
