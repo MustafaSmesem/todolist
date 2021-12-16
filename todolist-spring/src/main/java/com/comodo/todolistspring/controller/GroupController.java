@@ -4,6 +4,7 @@ import com.comodo.todolistspring.document.Group;
 import com.comodo.todolistspring.exception.BadRequestException;
 import com.comodo.todolistspring.exception.DocumentNotFoundException;
 import com.comodo.todolistspring.service.GroupService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +48,7 @@ public class GroupController {
     }
 
     @GetMapping(value = "/all", produces = "application/json")
+    @ApiOperation(value = "Get all groups by userId from Jwt token")
     public ResponseEntity<?> getAllGroups(@RequestAttribute("userId") String userId) {
         try {
             return ResponseEntity.ok(groupService.getAll(userId));
