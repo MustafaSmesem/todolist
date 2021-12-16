@@ -28,14 +28,23 @@ public class NotificationQueue {
 
 
     public void addNotification(Notification notification) {
-        rabbitTemplate.convertAndSend(notificationExchange, notificationAddRoute, notification.toString());
-        Log.warn("Notification [%s] send to rabbitMQ broker for add", notification.getDescription());
-        notificationRepository.save(notification);
+        try {
+            rabbitTemplate.convertAndSend(notificationExchange, notificationAddRoute, notification.toString());
+            Log.warn("Notification [%s] send to rabbitMQ broker for add", notification.getDescription());
+            notificationRepository.save(notification);
+        } catch (Exception e) {
+            Log.error("Cannot send notification: %s", e.getMessage());
+        }
     }
+
     public void removeNotification(Notification notification) {
-        rabbitTemplate.convertAndSend(notificationExchange, notificationRemoveRoute, notification.getId());
-        Log.warn("Notification [%s] send to rabbitMQ broker for delete", notification.getDescription());
-        notificationRepository.delete(notification);
+        try {
+            rabbitTemplate.convertAndSend(notificationExchange, notificationRemoveRoute, notification.getId());
+            Log.warn("Notification [%s] send to rabbitMQ broker for delete", notification.getDescription());
+            notificationRepository.delete(notification);
+        } catch (Exception e) {
+            Log.error("Cannot send notification: %s", e.getMessage());
+        }
     }
 
 
