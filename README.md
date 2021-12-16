@@ -1,5 +1,5 @@
 # Todolist
-###### Todolist WebAPP `version 1.0.0`
+###### Todolist WebAPP  <img src="https://img.shields.io/badge/version-1.0.0-green" alt="version"/>
 
 <p>
 <img src="https://img.shields.io/badge/react%20-%2320232a.svg?&style=for-the-badge&logo=react" alt="react"/>
