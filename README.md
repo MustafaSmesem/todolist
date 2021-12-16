@@ -1,11 +1,9 @@
 # Todolist
 ###### Todolist WebAPP `version 1.0.0`
 
-<p align="center">
+<p>
 <img src="https://img.shields.io/badge/react%20-%2320232a.svg?&style=for-the-badge&logo=react" alt="react"/>
-<img src="https://img.shields.io/badge/javascript%20-%2320232a.svg?&style=for-the-badge&logo=javascript" alt="js"/>
 <img src="https://img.shields.io/badge/spring%20boot%20-%2320232a.svg?&style=for-the-badge&logo=springboot" alt="springboot"/>
-<img src="https://img.shields.io/badge/Java%20-%2320232a.svg?&style=for-the-badge&logo=java" alt="java"/>
 <img src="https://img.shields.io/badge/rabbitMQ%20-%2320232a.svg?&style=for-the-badge&logo=rabbitmq" alt="rabbitmq"/>
 <img src="https://img.shields.io/badge/mongoDB%20-%2320232a.svg?&style=for-the-badge&logo=mongodb" alt="mongodb"/>
 <img src="https://img.shields.io/badge/docker%20-%2320232a.svg?&style=for-the-badge&logo=docker" alt="docker"/>
@@ -92,7 +90,7 @@ and run it
 ```
     docker-compose up
 ```
-finish :smiley:. you can now go to **http://localhost** and start manage your tasks.
+And that's it :smiley:. you can now go to **http://localhost** and start manage your tasks.
 
 
 ### *Authors*
