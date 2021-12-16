@@ -30,7 +30,7 @@ export function DropDownGroup(props) {
                 color="secondary"
                 variant={"outlined"}
                 onClick={handleClick}
-                label={group.title.toUpperCase()}
+                label={group && group.title.toUpperCase()}
                 size={"small"}
             />
             <Menu
@@ -44,7 +44,7 @@ export function DropDownGroup(props) {
             >
                 {groups?.map(group => (
                     <MenuItem onClick={() => handleSelect(group)} key={group.id}>
-                        <Typography variant={"subtitle2"} color="secondary" >{group.title.toUpperCase()}</Typography>
+                        <Typography variant={"subtitle2"} color="secondary" >{group && group.title.toUpperCase()}</Typography>
                     </MenuItem>
                 ))}
             </Menu>

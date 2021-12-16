@@ -23,7 +23,6 @@ function Main() {
             try {
                 const {data: groupData} = await groupsService.getAll();
                 setGroups(groupData);
-                console.log({groupData})
                 const {data: todoData} = await todosService.getAll();
                 // eslint-disable-next-line array-callback-return
                 todoData.map( todo => {

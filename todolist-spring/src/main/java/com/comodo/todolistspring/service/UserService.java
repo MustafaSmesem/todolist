@@ -32,7 +32,7 @@ public class UserService {
     }
 
     public List<User> getAll() {
-        return userRepository.findByEnabledTrue();
+        return userRepository.findByEnabledTrue().stream().peek(user -> user.setPassword("")).toList();
     }
 
     public User getUserByUserName(String userName) {
