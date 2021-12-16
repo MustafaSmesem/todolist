@@ -16,7 +16,7 @@ export const formValues = {
 }
 
 
-function RegisterForm(props) {
+function RegisterForm() {
     const {saveUserData} = useAuthService();
     const navigate = useNavigate();
     const validate = (fieldValues = values) => {
@@ -47,10 +47,9 @@ function RegisterForm(props) {
             try {
                 const {data} = await register(values);
                 saveUserData(data);
-                await groupService.saveGroup({title: 'Default'});
-                setTimeout(()=>{
-                    navigate("/");
-                }, 1000);
+                await groupService.saveGroup({title: 'Default'}).then(
+                    navigate("/")
+                );
             } catch ({response}) {
                 if (response && (response.status === 400 || response.status === 401)) {
                     toast.error(response.data.message);

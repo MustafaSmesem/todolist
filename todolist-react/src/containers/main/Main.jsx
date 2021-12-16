@@ -1,24 +1,22 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Container, Paper} from "@mui/material";
 import {Navigate, Route, Routes} from "react-router-dom";
 import useStyle from "./style";
 import {SideBar} from "../../components/components";
 import {AdminPage, GroupPage, LoginPage, TodoFinishedPage, TodoPage} from "../containers";
-import TodoContext from "../../context/todoContext";
-import GroupContext from "../../context/groupContext";
 import {toast} from "react-toastify";
-import {useUser} from "../../context/userContextProvider";
 import groupsService from "../../service/groupsService";
 import todosService from "../../service/todosService";
-import todoService from "../../service/todosService";
+import {useUser} from "../../context/userContextProvider";
+import {useGroup} from "../../context/groupContextProvider";
+import {useTodo} from "../../context/todoContextProvider";
 
 
 function Main() {
     const classes = useStyle();
     const {userInfo} = useUser();
-
-    const [todos, setTodos] = useState([]);
-    const [groups, setGroups] = useState([]);
+    const {groups, setGroups} = useGroup();
+    const {todos, setTodos} = useTodo();
 
     useEffect(() => {
         async function fetchGroupsAndTodos() {
@@ -42,7 +40,6 @@ function Main() {
         }, 1000)
     }, [userInfo]);
 
-
     const handleGroupTodosCountChange = async (groupId, amount) => {
         const index = groups.map(e => e.id).indexOf(groupId);
         try {
@@ -56,7 +53,7 @@ function Main() {
 
     const handleTodoDelete = async (todo) => {
         try {
-            await todoService.deleteTodo(todo.id);
+            await todosService.deleteTodo(todo.id);
             setTodos(todos.filter(record => record.id !== todo.id));
             await handleGroupTodosCountChange(todo.group, -1);
             toast.success(`Todo [${todo.description}] has been deleted successfully`);
@@ -68,21 +65,16 @@ function Main() {
     return (
         <Container>
             <SideBar>
-                <TodoContext.Provider value={{todos, setTodos}}>
-                    <GroupContext.Provider value={{groups, setGroups}}>
-                        <Paper className={classes.pageContent}>
-                            <Routes>
-                                <Route path="/login" element={userInfo ? <Navigate replace to={"/"}/> : <LoginPage/>}/>
-                                <Route path="/group" element={userInfo ? <GroupPage/> : <Navigate replace to={"/login"}/>}/>
-                                <Route path="/admin" element={userInfo ? <AdminPage/> : <Navigate replace to={"/login"}/>}/>
-                                <Route path="/todo-finish" element={userInfo ? <TodoFinishedPage onDelete={handleTodoDelete}/> : <Navigate replace to={"/login"}/>}/>
-                                <Route path="/" element={userInfo ? <TodoPage onGroupChange={handleGroupTodosCountChange} onDelete={handleTodoDelete}/> : <Navigate replace to={"/login"}/>}/>
-                                <Route path="*" element={<div>Not Found 404</div>}/>
-                            </Routes>
-                        </Paper>
-                    </GroupContext.Provider>
-                </TodoContext.Provider>
-
+                <Paper className={classes.pageContent}>
+                    <Routes>
+                        <Route path="/login" element={userInfo ? <Navigate replace to={"/"}/> : <LoginPage/>}/>
+                        <Route path="/group" element={userInfo ? <GroupPage/> : <Navigate replace to={"/login"}/>}/>
+                        <Route path="/admin" element={userInfo ? (userInfo.admin ? <AdminPage/> : <div>Unauthorized .. you are not an admin</div>) : <Navigate replace to={"/login"}/>}/>
+                        <Route path="/todo-finish" element={userInfo ? <TodoFinishedPage onDelete={handleTodoDelete}/> : <Navigate replace to={"/login"}/>}/>
+                        <Route path="/" element={userInfo ? <TodoPage onGroupChange={handleGroupTodosCountChange} onDelete={handleTodoDelete}/> : <Navigate replace to={"/login"}/>}/>
+                        <Route path="*" element={<div>Not Found 404</div>}/>
+                    </Routes>
+                </Paper>
             </SideBar>
         </Container>
     );

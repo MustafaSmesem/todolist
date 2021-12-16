@@ -12,7 +12,7 @@ export const formValues = {
 }
 
 
-function LoginForm(props) {
+function LoginForm() {
 
     const {authenticate} = useAuthService();
     const navigate = useNavigate();
@@ -37,10 +37,7 @@ function LoginForm(props) {
         e.preventDefault();
         if (validate()) {
             try {
-                await authenticate(values);
-                setTimeout(()=>{
-                    navigate("/");
-                }, 1000)
+                await authenticate(values).then(navigate("/"));
             } catch ({response}) {
                 if (response && (response.status === 400 || response.status === 401)) {
                     toast.error(response.data.message);

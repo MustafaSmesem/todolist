@@ -17,7 +17,7 @@ function UserProvider({children}) {
 function useUser() {
     const context = useContext(UserContext);
     if (context === undefined)
-        throw new Error('useCount must be used within a CountProvider');
+        throw new Error('useUser must be used within a UserProvider');
     return context;
 }
 

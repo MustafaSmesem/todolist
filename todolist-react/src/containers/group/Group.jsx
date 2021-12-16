@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {UseTable} from "../../widgets/table/Table";
 import Controls from "../../widgets/form/controls/controls";
 import {Divider, IconButton, InputAdornment, TableBody, TableCell, TableRow, Toolbar} from "@mui/material";
@@ -7,7 +7,7 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import AddIcon from '@mui/icons-material/Add';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import {Dialog} from "../../widgets/widgets";
-import GroupContext from "../../context/groupContext";
+import {useGroup} from "../../context/groupContextProvider";
 import ClearIcon from "@mui/icons-material/Clear";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import {toast} from "react-toastify";
@@ -25,7 +25,7 @@ const tableName = 'group';
 
 function Group() {
 
-    const {groups, setGroups} = useContext(GroupContext);
+    const {groups, setGroups} = useGroup();
     const [groupName, setGroupName] = useState("");
     const [groupId, setGroupId] = useState(null);
     const [error, setError] = useState(null);

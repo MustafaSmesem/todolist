@@ -1,24 +1,15 @@
-import React, {useState, useContext, useEffect} from 'react';
-import {
-    Box,
-    Chip,
-    Divider,
-    IconButton,
-    TableBody,
-    TableCell,
-    TableRow,
-    Typography
-} from "@mui/material";
+import React, {useState, useEffect} from 'react';
+import {Box, Chip, Divider, IconButton, TableBody, TableCell, TableRow, Typography} from "@mui/material";
 import {UseTable} from "../../widgets/table/Table";
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import {useStyle} from './style';
-import TodoContext from "../../context/todoContext";
 import ClearIcon from '@mui/icons-material/Clear';
 import {Dialog, DropDownGroup, DropDownPriority} from "../../widgets/widgets";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import Controls from "../../widgets/form/controls/controls";
 import AddIcon from "@mui/icons-material/Add";
-import GroupContext from "../../context/groupContext";
+import {useTodo} from "../../context/todoContextProvider";
+import {useGroup} from "../../context/groupContextProvider";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import TodoForm from "../../components/forms/todoForm";
 
@@ -47,8 +38,8 @@ const tableName = 'todo';
 
 function Todo(props) {
     const classes = useStyle();
-    const {todos, setTodos} = useContext(TodoContext);
-    const {groups} = useContext(GroupContext);
+    const {todos, setTodos} = useTodo();
+    const {groups} = useGroup();
     const [filterItems, setFilterItems] = useState({dueDate: [null, null], group: '-1', priority: 0});
     const [filterFn, setFilterFn] = useState({fn: items => items});
     const [openPopup, setOpenPopup] = useState(false);
@@ -260,7 +251,7 @@ function Todo(props) {
                         <TableHead/>
                         <TableBody>
                             {
-                                recordAfterPagingAndSorting()?.map((record, index) => (
+                                recordAfterPagingAndSorting()?.map((record) => (
                                     <TableRow key={record.id}>
                                         <TableCell>
                                             <IconButton classes={{root: classes.checkButton}}

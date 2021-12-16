@@ -1,6 +1,5 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {useStyle} from "./style";
-import TodoContext from "../../context/todoContext";
 import {UseTable} from "../../widgets/table/Table";
 import {Chip, Divider, IconButton, TableBody, TableCell, TableRow, Typography} from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -8,6 +7,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import todoService from '../../service/todosService';
 import {toast} from "react-toastify";
+import {useTodo} from "../../context/todoContextProvider";
 
 
 const headCells = [
@@ -21,7 +21,7 @@ const tableName = 'cTodo';
 
 function TodoFinished(props) {
     const classes = useStyle();
-    const {todos, setTodos} = useContext(TodoContext);
+    const {todos, setTodos} = useTodo();
     const {Table, TableHead, TablePagination, recordAfterPagingAndSorting, handleSort} = UseTable(todos?.filter(record => record.state), headCells, {fn: items => items}, tableName);
     const {onDelete} = props;
 

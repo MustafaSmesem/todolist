@@ -2,8 +2,10 @@ import './App.css';
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
 import {Main} from "../containers/containers";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import {useAuthService} from "../service/authService";
+import {GroupProvider} from "../context/groupContextProvider";
+import {TodoProvider} from "../context/todoContextProvider";
 
 function App() {
 
@@ -17,7 +19,11 @@ function App() {
     return (
         <>
             <ToastContainer/>
-            <Main/>
+            <GroupProvider>
+                <TodoProvider>
+                    <Main/>
+                </TodoProvider>
+            </GroupProvider>
         </>
     );
 }
