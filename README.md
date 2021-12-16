@@ -98,4 +98,3 @@ finish :smiley:. you can now go to **http://localhost** and start manage your ta
 ### *Authors*
 * Mustafa Bahaa SAMISM (email: mustafa.smesem@gmail.com)
   - [linkedin](https://www.linkedin.com/in/mustafa-samism/)
-  - [website](https://joumer.com)
