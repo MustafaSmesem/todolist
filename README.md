@@ -9,7 +9,6 @@
 <img src="https://img.shields.io/badge/rabbitMQ%20-%2320232a.svg?&style=for-the-badge&logo=rabbitmq" alt="rabbitmq"/>
 <img src="https://img.shields.io/badge/mongoDB%20-%2320232a.svg?&style=for-the-badge&logo=mongodb" alt="mongodb"/>
 <img src="https://img.shields.io/badge/docker%20-%2320232a.svg?&style=for-the-badge&logo=docker" alt="docker"/>
-<img src="https://img.shields.io/badge/json%20-%2320232a.svg?&style=for-the-badge&logo=json" alt="json"/>
 </p>
 
 ## Overview
