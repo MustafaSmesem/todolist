@@ -22,11 +22,12 @@ import static org.mockito.Mockito.*;
 class TodoServiceTest {
 
     @Mock private TodoRepository todoRepository;
+    @Mock private NotificationQueue notificationQueue;
     private TodoService underTest;
 
     @BeforeEach
     void setUp() {
-        underTest = new TodoService(todoRepository);
+        underTest = new TodoService(todoRepository, notificationQueue);
     }
 
     @Test

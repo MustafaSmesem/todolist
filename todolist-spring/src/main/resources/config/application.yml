@@ -6,6 +6,24 @@ spring:
   data:
     mongodb:
       database: todolist
+      auto-index-creation: true
+
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "mustafa"
+    password: "mtntm"
+
+rabbitmq:
+  notification:
+    exchange: todolist.notification.exchange
+    queue:
+      add: todolist.notification.add.queue
+      remove: todolist.notification.remove.queue
+    route:
+      add:  todolist.notification.add.route.#
+      remove: todolist.notification.remove.route.#
+
 
 ---
 
@@ -16,4 +34,20 @@ spring:
       on-profile: prod
   data:
     mongodb:
-      uri:  ${DB_URL})
+      uri:  ${DB_URL}
+
+  rabbitmq:
+    host: ${RMQ_HOST}
+    port: 5672
+    username: guest
+    password: guest
+
+rabbitmq:
+  notification:
+    exchange: todolist.notification.exchange
+    queue:
+      add: todolist.notification.add.queue
+      remove: todolist.notification.remove.queue
+    route:
+      add:  todolist.notification.add.route.#
+      remove: todolist.notification.remove.route.#

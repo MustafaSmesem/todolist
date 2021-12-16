@@ -4,6 +4,7 @@ import com.comodo.todolistspring.document.Todo;
 import com.comodo.todolistspring.exception.BadRequestException;
 import com.comodo.todolistspring.exception.DocumentNotFoundException;
 import com.comodo.todolistspring.service.TodoService;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class TodoController {
     }
 
     @PostMapping(value = "/save", produces = "application/json")
-    public ResponseEntity<?> saveGroup(@RequestAttribute("userId") String userId, @RequestBody Todo formTodo) {
+    public ResponseEntity<?> saveTodo(@RequestAttribute("userId") String userId, @RequestBody Todo formTodo) {
         try{
             var todo = todoService.save(formTodo, userId);
             return ResponseEntity.status(HttpStatus.OK).body(todo);
@@ -33,7 +34,8 @@ public class TodoController {
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<?> deleteGroup(@RequestAttribute("userId") String userId, @PathVariable("id") String todoId) {
+    public ResponseEntity<?> deleteTodo(@RequestAttribute("userId") String userId,
+                                        @ApiParam(value = "The id of todo that we want to delete", required = true) @PathVariable("id") String todoId) {
         try{
             todoService.deleteTodo(todoId, userId);
             return ResponseEntity.ok(String.format("Todo [%s] has been removed successfully", todoId));
@@ -47,7 +49,7 @@ public class TodoController {
     }
 
     @GetMapping(value = "/all", produces = "application/json")
-    public ResponseEntity<?> getAllGroups(@RequestAttribute("userId") String userId) {
+    public ResponseEntity<?> getAllTodosById(@RequestAttribute("userId") String userId) {
         try {
             return ResponseEntity.ok(todoService.getAll(userId));
         } catch (Exception e) {

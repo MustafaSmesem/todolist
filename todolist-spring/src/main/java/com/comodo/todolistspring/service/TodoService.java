@@ -1,5 +1,6 @@
 package com.comodo.todolistspring.service;
 
+import com.comodo.todolistspring.document.Notification;
 import com.comodo.todolistspring.document.Todo;
 import com.comodo.todolistspring.document.User;
 import com.comodo.todolistspring.exception.BadRequestException;
@@ -15,6 +16,7 @@ import java.util.List;
 public class TodoService {
 
     private final TodoRepository todoRepository;
+    private final NotificationQueue notificationQueue;
 
     public Todo save(Todo todo, String userId) {
         if (todo.getId() != null && !todo.getId().isEmpty()) {
@@ -25,7 +27,9 @@ public class TodoService {
                 throw new BadRequestException("You dont have the permission to modify another person todos");
         }
         todo.setUser(new User(userId));
-        return todoRepository.save(todo);
+        todo = todoRepository.save(todo);
+        notificationQueue.addNotification(new Notification(todo));
+        return todo;
     }
 
 
@@ -36,6 +40,7 @@ public class TodoService {
         var todo = todoOptional.get();
         if (!todo.getUser().getId().equals(userId))
             throw new BadRequestException("You dont have the permission to delete another person todos");
+        notificationQueue.removeNotification(new Notification(todo));
         todoRepository.delete(todo);
     }
 

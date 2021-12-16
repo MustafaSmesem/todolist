@@ -13,18 +13,17 @@ services:
   api:
     depends_on:
       - db
+      - rmq
+    links:
+      - db
+      - rmq
     build: ./todolist-spring
     image: todolist_api:1
     ports: 
       - "9090:9090"
     environment: 
       DB_URL: mongodb://db:27020/todolist
-    healthcheck:
-      test: [ "CMD-SHELL", "nc -z localhost:27020" ]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
+      RMQ_HOST: rmq
     restart: unless-stopped
 
   db:
@@ -34,7 +33,28 @@ services:
       - "27020:27020"
     volumes:
       - todolist:/data/db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:27020"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
     restart: unless-stopped
+  rmq:
+    image: rabbitmq:3.9.11-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - todolist:/rabbitmq
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5672"]
+      interval: 30s
+      timeout: 30s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
 
 volumes:
   todolist:
