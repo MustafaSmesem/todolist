@@ -19,13 +19,27 @@ https://user-images.githubusercontent.com/23532861/146496298-30c57ed9-e778-4c4b-
 
 #### Manage groups
 
+
+https://user-images.githubusercontent.com/23532861/146496816-7cc69b36-841c-4758-bcf5-51a8f0fbc8e4.mp4
+
+
 #### Manage tasks
+
+
+https://user-images.githubusercontent.com/23532861/146496829-d69f5714-ca66-46e3-8de6-fd2e5b38066b.mp4
+
 
 #### Login as Admin
 in the first initialize of the project it adds two user `admin@domain.test`,`user@domain.test` with password `1234`.
 
 
+https://user-images.githubusercontent.com/23532861/146496845-b69afc47-5d8c-47fe-a371-5cb4b3b117e9.mov
+
+
+
 > here we just simulate the admin authorization the admin page is not completed
+
+<br/>
 
 ## installation
 For Local Installation
