@@ -13,7 +13,11 @@
 Free and open source todo task manager app.
 <details><summary>Register new user</summary>
 <p>
-https://github.com/MustafaSmesem/todolist/blob/master/media/Register.mp4
+
+
+https://user-images.githubusercontent.com/23532861/146496298-30c57ed9-e778-4c4b-953a-a30cff72eab9.mp4
+
+
 </p>
 </details>
 
