@@ -127,6 +127,7 @@ And that's it :smiley:. you can now go to **http://localhost** and start manage 
 - complete admin user page
 - complete notification mechanism
 - add settings page
+- Increase the responsivity of the web design especially in the mobile screen size
 
 <br/><br/>
 
