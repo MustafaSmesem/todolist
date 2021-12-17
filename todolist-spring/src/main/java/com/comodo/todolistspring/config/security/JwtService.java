@@ -1,7 +1,5 @@
 package com.comodo.todolistspring.config.security;
 
-import com.comodo.todolistspring.exception.DocumentNotFoundException;
-import com.comodo.todolistspring.config.security.JwtTokenUtil;
 import com.comodo.todolistspring.document.records.JwtBadResponse;
 import com.comodo.todolistspring.document.records.JwtResponse;
 import com.comodo.todolistspring.service.AppUserDetailsService;
@@ -14,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -44,7 +43,7 @@ public class JwtService {
             return ResponseEntity.ok(new JwtResponse(userDetails.getId(), username, userDetails.getFullName(), token, userDetails.isAdmin()));
         } catch (DisabledException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON).body(new JwtBadResponse("user_disabled"));
-        } catch (DocumentNotFoundException e) {
+        } catch (UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(new JwtBadResponse("user doesn't exist"));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(new JwtBadResponse("bad_credentials"));

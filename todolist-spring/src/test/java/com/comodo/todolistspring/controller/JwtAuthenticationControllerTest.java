@@ -8,10 +8,12 @@ import com.comodo.todolistspring.service.RoleService;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -28,7 +30,13 @@ class JwtAuthenticationControllerTest {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private RoleService roleService;
+    @Autowired private MongoTemplate mongoTemplate;
 
+
+    @AfterEach
+    void tearDown() {
+        mongoTemplate.getDb().drop();
+    }
 
     @Test
     void canGenerateAuthenticationToken() throws Exception {

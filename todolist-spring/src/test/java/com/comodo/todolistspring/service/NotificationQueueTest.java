@@ -46,19 +46,6 @@ class NotificationQueueTest {
         assertThat(capturedNotification).isEqualTo(notification);
     }
 
-    @Test
-    void shouldThrowExceptionIfRabbitMQConnectionRefusedForAddNotification() {
-        //given
-        var notification = new Notification("todoId", "description", new Date());
-
-        // when
-        willThrow(new AmqpException("")).given(rabbitTemplate).convertAndSend("exchange", "route", notification.toString());
-        underTest.addNotification(notification);
-
-        // then
-        verify(notificationRepository, never()).save(any());
-
-    }
 
     @Test
     void canSendRemoveNotification() {
@@ -72,16 +59,19 @@ class NotificationQueueTest {
         verify(notificationRepository, times(1)).delete(notification);
     }
 
+
     @Test
-    void shouldThrowExceptionIfRabbitMQConnectionRefusedForDeleteNotification() {
+    void shouldCatchAMQExceptionIfRabbitMQConnectionRefusedWhenSendNotification() {
         //given
         var notification = new Notification("todoId", "description", new Date());
 
         // when
         willThrow(new AmqpException("")).given(rabbitTemplate).convertAndSend("exchange", "route", notification.toString());
+        underTest.addNotification(notification);
         underTest.removeNotification(notification);
 
         // then
+        verify(notificationRepository, never()).save(any());
         verify(notificationRepository, never()).delete(any());
 
     }

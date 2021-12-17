@@ -2,7 +2,6 @@ package com.comodo.todolistspring.controller;
 
 import com.comodo.todolistspring.document.Role;
 import com.comodo.todolistspring.document.User;
-import com.comodo.todolistspring.exception.BadRequestException;
 import com.comodo.todolistspring.logging.Log;
 import com.comodo.todolistspring.service.UserService;
 import com.comodo.todolistspring.config.security.JwtService;
@@ -13,8 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -28,11 +25,13 @@ public class UserController {
         this.jwtService = jwtService;
     }
 
+
     @GetMapping(value = "/getAll", produces = "application/json")
     @PreAuthorize("hasAuthority('ADMIN_USER')")
     public ResponseEntity<?> getAllUsers() {
         return ResponseEntity.ok(userService.getAll());
     }
+
 
     @PostMapping(value = "/register", produces = "application/json")
     public ResponseEntity<?> register(@RequestBody User formUser) {
@@ -41,6 +40,7 @@ public class UserController {
             user.setName(formUser.getName());
             user.setSurname(formUser.getSurname());
             user.setUsername(formUser.getUsername());
+            user.setAdmin(formUser.isAdmin());
             if (formUser.getPassword() != null && !formUser.getPassword().equals("") && !formUser.getPassword().isEmpty()) {
                 user.setPassword(BCrypt.hashpw(formUser.getPassword(), BCrypt.gensalt()));
             }
