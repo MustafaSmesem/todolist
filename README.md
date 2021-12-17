@@ -12,11 +12,20 @@
 ## Overview
 Free and open source todo task manager app.
 
-###Register new user
+
+#### Register new user
 
 https://user-images.githubusercontent.com/23532861/146496298-30c57ed9-e778-4c4b-953a-a30cff72eab9.mp4
 
+#### Manage groups
 
+#### Manage tasks
+
+#### Login as Admin
+in the first initialize of the project it adds two user `admin@domain.test`,`user@domain.test` with password `1234`.
+
+
+> here we just simulate the admin authorization the admin page is not completed
 
 ## installation
 For Local Installation
