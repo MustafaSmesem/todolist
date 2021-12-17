@@ -45,8 +45,9 @@ public class BootstrapDB implements ApplicationRunner {
         mongoTemplate.getDb().drop();
         var role1 = createRole("STANDARD_USER", "Standard User - Has no admin rights");
         var role2 = createRole("ADMIN_USER", "Admin User - Has permission to perform admin tasks");
-        createUser("Mustafa", "SAMISM", "mustafa.smesem@gmail.com", "1234" , true, Arrays.asList(role1, role2));
-        createUser("Mustafa", "SAMISM", "user@domain.com", "1234" , false, List.of(role1));
+        createUser("Admin", "USER", "admin@domain.test", "1234" , true, Arrays.asList(role1, role2));
+        createUser("Standard", "USER", "user@domain.test", "1234" , false, List.of(role1));
+        Log.warn("New users has been added: \nadmin@doamin.test -> 1234\nuser@doamin.test -> 1234");
         Log.warn("TodoList backend server has been started");
     }
 
