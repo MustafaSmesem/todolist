@@ -121,6 +121,14 @@ and run it
 ```
 And that's it :smiley:. you can now go to **http://localhost** and start manage your tasks.
 
+<br/>
+
+### Todo
+- complete admin user page
+- complete notification mechanism
+- add settings page
+
+<br/><br/>
 
 ### *Authors*
 * Mustafa Bahaa SAMISM (email: mustafa.smesem@gmail.com)
