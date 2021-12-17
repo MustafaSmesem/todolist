@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-ENV REACT_APP_API_URL=http://localhost:9090
+ENV REACT_APP_API_URL=http://138.197.103.13:9090
 RUN npm run build
 
 
