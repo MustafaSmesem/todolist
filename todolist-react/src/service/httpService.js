@@ -1,5 +1,8 @@
 import axios from "axios";
 import {toast} from 'react-toastify';
+import {apiURL} from "../config.json";
+
+const apiEndpoint = process.env.REACT_APP_API_URL || apiURL;
 
 
 axios.interceptors.response.use(null, error => {
@@ -22,4 +25,5 @@ export default {
     put: axios.put,
     delete: axios.delete,
     setBearerToken,
+    apiEndpoint,
 }

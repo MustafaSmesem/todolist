@@ -1,7 +1,6 @@
 import http from "./httpService";
-import {apiEndpoint} from "../config.json";
 
-const url = apiEndpoint + '/todo';
+const url = http.apiEndpoint + '/todo';
 
 
 export function getAll() {

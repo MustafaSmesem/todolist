@@ -1,7 +1,7 @@
 import http from "./httpService";
-import {apiEndpoint} from "../config.json";
 
-const url = apiEndpoint + '/group';
+
+const url = http.apiEndpoint + '/group';
 
 
 export function getAll() {

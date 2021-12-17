@@ -1,9 +1,8 @@
 import http from "./httpService";
-import {apiEndpoint} from "../config.json";
 import {useUser} from "../context/userContextProvider";
 
 
-const url = apiEndpoint + '/authenticate';
+const url = http.apiEndpoint + '/authenticate';
 
 function useAuthService() {
     const {userInfo, setUserInfo} = useUser();
