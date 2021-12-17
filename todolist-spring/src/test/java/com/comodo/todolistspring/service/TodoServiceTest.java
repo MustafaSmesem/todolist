@@ -12,6 +12,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Date;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -31,21 +32,81 @@ class TodoServiceTest {
     }
 
     @Test
-    void canSaveTodo() {
+    void canSaveNewTodo() {
         // given
         var userId = "user-id";
         var todo = new Todo();
         todo.setUser(new User(userId));
+        todo.setDescription("todo description");
+        todo.setDueDate(new Date());
 
         // when
-        underTest.save(todo, userId);
+        when(todoRepository.save(todo)).thenReturn(todo);
+        todo = underTest.save(todo, userId);
 
         // then
         var todoArgumentCaptor = ArgumentCaptor.forClass(Todo.class);
         verify(todoRepository).save(todoArgumentCaptor.capture());
         var capturedTodo = todoArgumentCaptor.getValue();
-
         assertThat(capturedTodo).isEqualTo(todo);
+    }
+
+    @Test
+    void canUpdateTodo() {
+        // given
+        var userId = "user-id";
+        var todoId = "978465132";
+        var todo = new Todo();
+        todo.setUser(new User(userId));
+        todo.setId(todoId);
+        todo.setDescription("todo description");
+        todo.setDueDate(new Date());
+
+        // when
+        when(todoRepository.findById(todo.getId())).thenReturn(Optional.of(todo));
+        underTest.save(todo, userId);
+
+        // then
+        verify(todoRepository).save(todo);
+    }
+
+    @Test
+    void shouldThrowExceptionIfTodoNotFound() {
+        // given
+        var userId = "user-id";
+        var todoId = "978465132";
+        var todo = new Todo();
+        todo.setUser(new User(userId));
+        todo.setId(todoId);
+
+        // when
+        when(todoRepository.findById(todo.getId())).thenReturn(Optional.empty());
+
+        // then
+        assertThatThrownBy(() -> underTest.save(todo, userId))
+                .isInstanceOf(DocumentNotFoundException.class)
+                .hasMessageContaining(String.format("Cannot found the document(Todo) in database: %s", todoId));
+
+    }
+
+    @Test
+    void shouldThrowExceptionIfTodoUserNotEqualToAuthenticatedUserId() {
+        // given
+        var userId = "user-id";
+        var anotherUserId = "user-id-another";
+        var todoId = "978465132";
+        var todo = new Todo();
+        todo.setUser(new User(userId));
+        todo.setId(todoId);
+
+        // when
+        when(todoRepository.findById(todo.getId())).thenReturn(Optional.of(todo));
+
+        // then
+        assertThatThrownBy(() -> underTest.save(todo, anotherUserId))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessageContaining("You dont have the permission to modify another person todos");
+
     }
 
     @Test

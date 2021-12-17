@@ -24,7 +24,7 @@ class RoleServiceTest {
     }
 
     @Test
-    void itShouldSaveRole() {
+    void canSaveRole() {
         // given
         var role = new Role();
 

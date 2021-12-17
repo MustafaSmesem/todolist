@@ -17,7 +17,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -43,11 +42,72 @@ class GroupServiceTest {
         underTest.save(group, userId);
 
         // then
+        var groupArgumentCaptor = ArgumentCaptor.forClass(Group.class);
+        verify(groupRepository).save(groupArgumentCaptor.capture());
+        var capturedGroup = groupArgumentCaptor.getValue();
+
+        assertThat(capturedGroup).isEqualTo(group);
+    }
+
+    @Test
+    void canUpdateGroup() {
+        // given
+        var userId = "userId";
+        var groupId = "groupId";
+        var group = new Group();
+        group.setUser(new User(userId));
+        group.setId(groupId);
+
+        // when
+        when(groupRepository.findById(groupId)).thenReturn(Optional.of(group));
+        underTest.save(group, userId);
+
+        // then
         var userArgumentCaptor = ArgumentCaptor.forClass(Group.class);
         verify(groupRepository).save(userArgumentCaptor.capture());
-        var capturedUser = userArgumentCaptor.getValue();
+        var capturedGroup = userArgumentCaptor.getValue();
 
-        assertThat(capturedUser).isEqualTo(group);
+        assertThat(capturedGroup).isEqualTo(group);
+    }
+
+
+    @Test
+    void shouldThrowExceptionIfGroupNotFound() {
+        // given
+        var userId = "user-id";
+        var groupId = "978465132";
+        var group = new Group();
+        group.setUser(new User(userId));
+        group.setId(groupId);
+
+        // when
+        when(groupRepository.findById(group.getId())).thenReturn(Optional.empty());
+
+        // then
+        assertThatThrownBy(() -> underTest.save(group, userId))
+                .isInstanceOf(DocumentNotFoundException.class)
+                .hasMessageContaining(String.format("Cannot found the document(Group) in database: %s", groupId));
+
+    }
+
+    @Test
+    void shouldThrowExceptionIfGroupUserNotEqualToAuthenticatedUserId() {
+        // given
+        var userId = "user-id";
+        var anotherUserId = "user-id-another";
+        var groupId = "978465132";
+        var group = new Group();
+        group.setUser(new User(userId));
+        group.setId(groupId);
+
+        // when
+        when(groupRepository.findById(group.getId())).thenReturn(Optional.of(group));
+
+        // then
+        assertThatThrownBy(() -> underTest.save(group, anotherUserId))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessageContaining("You dont have the permission to modify another person groups");
+
     }
 
     @Test
