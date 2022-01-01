@@ -4,6 +4,7 @@ package com.comodo.todolistspring.controller;
 import com.comodo.todolistspring.document.records.JwtRequest;
 import com.comodo.todolistspring.config.security.JwtService;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class JwtAuthenticationController {
     }
 
     @GetMapping("/hello")
-    public String helloInternationalized(@RequestHeader(value = "Accept-language", required = false) String localeString) {
-        return messageSource.getMessage("hello.world", null, new Locale(localeString));
+    public String helloInternationalized() {
+        return messageSource.getMessage("hello.world", null, LocaleContextHolder.getLocale());
     }
 }
