@@ -17,15 +17,21 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    @Qualifier("appUserDetailsService")
-    @Autowired private UserDetailsService jwtUserDetailsService;
-    @Autowired private JwtRequestFilter jwtRequestFilter;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final UserDetailsService jwtUserDetailsService;
+    private final JwtRequestFilter jwtRequestFilter;
+
+    public WebSecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, @Qualifier("appUserDetailsService") UserDetailsService jwtUserDetailsService, JwtRequestFilter jwtRequestFilter) {
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+        this.jwtUserDetailsService = jwtUserDetailsService;
+        this.jwtRequestFilter = jwtRequestFilter;
+    }
 
 
     @Autowired
@@ -47,13 +53,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable()
-                .authorizeRequests().antMatchers("/authenticate", "/public/**", "/v2/api-docs/**", "/swagger**",
-                        "/swagger**/**", "/webjars/**", "/csrf", "/", "/users/register")
-                .permitAll().antMatchers(HttpMethod.OPTIONS, "/**").permitAll().
-                anyRequest().authenticated().and().
-                exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement().
-                sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        httpSecurity
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/authenticate", "/public/**", "/v2/api-docs/**", "/swagger**",
+                        "/swagger**/**", "/webjars/**", "/csrf", "/", "/users/register").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .anyRequest().authenticated()
+                .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
