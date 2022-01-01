@@ -35,36 +35,27 @@ public class UserController {
 
     @PostMapping(value = "/register", produces = "application/json")
     public ResponseEntity<?> register(@RequestBody User formUser) {
-        try {
-            var user = new User();
-            user.setName(formUser.getName());
-            user.setSurname(formUser.getSurname());
-            user.setUsername(formUser.getUsername());
-            user.setAdmin(formUser.isAdmin());
-            if (formUser.getPassword() != null && !formUser.getPassword().equals("") && !formUser.getPassword().isEmpty()) {
-                user.setPassword(BCrypt.hashpw(formUser.getPassword(), BCrypt.gensalt()));
-            }
-            var roles = new ArrayList<Role>();
-            roles.add(new Role("STANDARD_USER"));
-            if (formUser.isAdmin()) roles.add(new Role("ADMIN_USER"));
-            user.setRoles(roles);
-            userService.saveUser(user);
-            return jwtService.authenticate(formUser.getUsername(), formUser.getPassword());
-        } catch (Exception e) {
-            Log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        var user = new User();
+        user.setName(formUser.getName());
+        user.setSurname(formUser.getSurname());
+        user.setUsername(formUser.getUsername());
+        user.setAdmin(formUser.isAdmin());
+        if (formUser.getPassword() != null && !formUser.getPassword().equals("") && !formUser.getPassword().isEmpty()) {
+            user.setPassword(BCrypt.hashpw(formUser.getPassword(), BCrypt.gensalt()));
         }
+        var roles = new ArrayList<Role>();
+        roles.add(new Role("STANDARD_USER"));
+        if (formUser.isAdmin()) roles.add(new Role("ADMIN_USER"));
+        user.setRoles(roles);
+        userService.saveUser(user);
+        return jwtService.authenticate(formUser.getUsername(), formUser.getPassword());
     }
 
     @PostMapping(value = "/update", produces = "application/json")
     @PreAuthorize("hasAuthority('ADMIN_USER')")
     public ResponseEntity<?> updateUser(@RequestBody User formUser) {
-        try {
-            var user = userService.saveUser(formUser);
-            return ResponseEntity.ok(user);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+        var user = userService.saveUser(formUser);
+        return ResponseEntity.ok(user);
     }
 
 

@@ -21,26 +21,14 @@ public class GroupController {
 
     @PostMapping(value = "/save", produces = "application/json")
     public ResponseEntity<?> saveGroup(@RequestAttribute("userId") String userId, @RequestBody Group formGroup) {
-        try{
-            var group = groupService.save(formGroup, userId);
-            return ResponseEntity.status(HttpStatus.OK).body(group);
-        } catch (DocumentNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (BadRequestException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        }
+        var group = groupService.save(formGroup, userId);
+        return ResponseEntity.status(HttpStatus.OK).body(group);
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> deleteGroup(@RequestAttribute("userId") String userId, @PathVariable("id") String groupId) {
-        try{
-            groupService.deleteGroup(groupId, userId);
-            return ResponseEntity.ok(String.format("Group [%s] has been removed successfully", groupId));
-        } catch (DocumentNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (BadRequestException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        }
+       groupService.deleteGroup(groupId, userId);
+       return ResponseEntity.ok(String.format("Group [%s] has been removed successfully", groupId));
     }
 
     @GetMapping(value = "/all", produces = "application/json")

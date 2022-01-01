@@ -4,6 +4,7 @@ import com.comodo.todolistspring.document.Group;
 import com.comodo.todolistspring.document.User;
 import com.comodo.todolistspring.exception.BadRequestException;
 import com.comodo.todolistspring.exception.DocumentNotFoundException;
+import com.comodo.todolistspring.exception.UnAuthorizedRequestException;
 import com.comodo.todolistspring.repository.GroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class GroupService {
             if (groupOptional.isEmpty())
                 throw new DocumentNotFoundException("Group", group.getId());
             if (!groupOptional.get().getUser().getId().equals(userId))
-                throw new BadRequestException("You dont have the permission to modify another person groups");
+                throw new UnAuthorizedRequestException("You dont have the permission to modify another person groups");
         }
         group.setUser(new User(userId));
         return groupRepository.save(group);
@@ -34,7 +35,7 @@ public class GroupService {
             throw new DocumentNotFoundException("Group", groupId);
         var group = groupOptional.get();
         if (!group.getUser().getId().equals(userId))
-            throw new BadRequestException("You dont have the permission to modify another person groups");
+            throw new UnAuthorizedRequestException("You dont have the permission to modify another person groups");
         groupRepository.delete(group);
     }
 

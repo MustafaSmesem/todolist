@@ -21,27 +21,15 @@ public class TodoController {
 
     @PostMapping(value = "/save", produces = "application/json")
     public ResponseEntity<?> saveTodo(@RequestAttribute("userId") String userId, @RequestBody Todo formTodo) {
-        try{
-            var todo = todoService.save(formTodo, userId);
-            return ResponseEntity.status(HttpStatus.OK).body(todo);
-        } catch (DocumentNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (BadRequestException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        }
+        var todo = todoService.save(formTodo, userId);
+        return ResponseEntity.status(HttpStatus.OK).body(todo);
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> deleteTodo(@RequestAttribute("userId") String userId,
                                         @ApiParam(value = "The id of todo that we want to delete", required = true) @PathVariable("id") String todoId) {
-        try{
-            todoService.deleteTodo(todoId, userId);
-            return ResponseEntity.ok(String.format("Todo [%s] has been removed successfully", todoId));
-        } catch (DocumentNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (BadRequestException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        }
+        todoService.deleteTodo(todoId, userId);
+        return ResponseEntity.ok(String.format("Todo [%s] has been removed successfully", todoId));
     }
 
     @GetMapping(value = "/all", produces = "application/json")
