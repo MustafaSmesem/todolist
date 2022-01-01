@@ -1,13 +1,13 @@
 package com.comodo.todolistspring.controller;
 
 import com.comodo.todolistspring.document.Group;
-import com.comodo.todolistspring.exception.BadRequestException;
-import com.comodo.todolistspring.exception.DocumentNotFoundException;
 import com.comodo.todolistspring.service.GroupService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/group")
@@ -20,7 +20,7 @@ public class GroupController {
     }
 
     @PostMapping(value = "/save", produces = "application/json")
-    public ResponseEntity<?> saveGroup(@RequestAttribute("userId") String userId, @RequestBody Group formGroup) {
+    public ResponseEntity<?> saveGroup(@RequestAttribute("userId") String userId, @Valid @RequestBody Group formGroup) {
         var group = groupService.save(formGroup, userId);
         return ResponseEntity.status(HttpStatus.OK).body(group);
     }
