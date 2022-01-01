@@ -3,9 +3,13 @@ package com.comodo.todolistspring.controller;
 import com.comodo.todolistspring.document.Group;
 import com.comodo.todolistspring.service.GroupService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import javax.validation.Valid;
 
@@ -20,9 +24,12 @@ public class GroupController {
     }
 
     @PostMapping(value = "/save", produces = "application/json")
-    public ResponseEntity<?> saveGroup(@RequestAttribute("userId") String userId, @Valid @RequestBody Group formGroup) {
+    public EntityModel<Group> saveGroup(@RequestAttribute("userId") String userId, @Valid @RequestBody Group formGroup) {
         var group = groupService.save(formGroup, userId);
-        return ResponseEntity.status(HttpStatus.OK).body(group);
+        var model = EntityModel.of(group);
+        var linkToAllGroups = linkTo(methodOn(this.getClass()).getAllGroups("user-id"));
+        model.add(linkToAllGroups.withRel("all-groups"));
+        return model;
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
